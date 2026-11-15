@@ -7,16 +7,41 @@ const profiles={
 'Snake Plant':{soil:[20,45],light:[150,700],temp:[16,30],description:'Drought-tolerant, adaptable to different light levels.'},
 'Fiddle-leaf Fig':{soil:[40,60],light:[400,900],temp:[18,27],description:'Prefers consistent moisture, warmth and bright light.'}
 };
+const personalities={
+ 'Monstera':{
+  title:'The optimist',tempo:420,blink:4700,
+  happy:['Life is looking leafy!','New day, new leaf.','I could grow all day!'],
+  neutral:['A little adjustment, perhaps?','Still smiling, just checking in.'],
+  worried:['My leaves are sending signals!','Something feels a little off.'],
+  sad:['I could really use some care.','My jungle spirit needs a boost.']
+ },
+ 'Snake Plant':{
+  title:'The stoic',tempo:850,blink:7200,
+  happy:['All systems green.','Quietly thriving.','Steady as ever.'],
+  neutral:['Noted.','A minor deviation.'],
+  worried:['Conditions require attention.','I have concerns.'],
+  sad:['Even I have limits.','This is beyond my comfort zone.']
+ },
+ 'Fiddle-leaf Fig':{
+  title:'The diva',tempo:260,blink:2800,
+  happy:['Obviously, I look fabulous.','A standing ovation, please!'],
+  neutral:['Is this really my ideal lighting?','I expected perfection.'],
+  worried:['The audacity of this climate!','I demand better conditions!'],
+  sad:['This is a botanical tragedy!','Someone fetch my caretaker!']
+ }
+};
 const specs=[['soil','Soil moisture','%',0,100],['light','Ambient light','lux',0,1200],['temp','Temperature','°C',0,40]];
 const values={soil:50,light:500,temp:23};
 const $=id=>document.getElementById(id);const select=$('plant');Object.keys(profiles).forEach(name=>{const option=document.createElement('option');option.textContent=name;option.value=name;select.append(option)});
 function state(value,[min,max]){if(value>=min&&value<=max)return 'good';const tolerance=(max-min)*.15;return value>=min-tolerance&&value<=max+tolerance?'warn':'bad'}
 // 40 × 40 pixel-art character, rendered at native resolution and scaled crisply.
-let currentMood='happy', frame=0, lastFrame=0;
+let currentMood='happy', frame=0, lastFrame=0, moodSince=0, messageIndex=0, previousSpecies='', previousMood='';
 function renderFace(mood, tick=0){
  const canvas=$('face'),ctx=canvas.getContext('2d');canvas.width=320;canvas.height=320;
  ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,320,320);
- const u=8, bounce=Math.round(Math.sin(tick/420)*.7), blink=(tick%4700<135), dark='#263b30';
+ const personality=personalities[select.value];
+ const u=8, bounce=Math.round(Math.sin(tick/personality.tempo)*(select.value==='Fiddle-leaf Fig'?1.5:.7)),
+ blink=(tick%personality.blink<(select.value==='Snake Plant'?95:145)), dark='#263b30';
  const palettes={
  happy:['#a8ecab','#75ca87','#4d9f69','#d4ffbe'],
  neutral:['#e9d99b','#c3b47a','#938a60','#fff0bd'],
@@ -88,6 +113,14 @@ function renderFace(mood, tick=0){
   const drop=Math.floor((tick/180)%5);
   px(11,24+drop,2,3,'#7fc9e8');px(28,24+(drop+2)%5,2,3,'#7fc9e8');
  }
+ // Species-specific reactions: patient snake plant, exuberant Monstera, theatrical fig.
+ if(species==='Snake Plant'&&mood==='happy'){px(3,29,3,1,'#9ccaa0');px(34,29,3,1,'#9ccaa0')}
+ if(species==='Fiddle-leaf Fig'&&mood==='worried'){
+  const sweat=Math.floor(tick/210)%4;px(34,19+sweat,2,3,'#84cce2');
+ }
+ if(species==='Fiddle-leaf Fig'&&mood==='sad'){
+  px(3,7,3,2,'#f0d0b0');px(34,7,3,2,'#f0d0b0');
+ }
  // Tiny floating pixel sparkles when thriving
  if(mood==='happy'){
   const phase=Math.floor(tick/500)%4;
@@ -95,9 +128,48 @@ function renderFace(mood, tick=0){
   px(4,10-phase,1,1,'#fff8c2');
  }
 }
-function animateFace(t){if(t-lastFrame>70){frame=t;renderFace(currentMood,t);lastFrame=t}requestAnimationFrame(animateFace)}
+function animateFace(t){
+ if(t-lastFrame>70){frame=t;renderFace(currentMood,t);lastFrame=t}
+ requestAnimationFrame(animateFace)
+}
 requestAnimationFrame(animateFace);
-function update(){const profile=profiles[select.value];$('plant-label').textContent=select.value.toUpperCase();$('description').textContent=profile.description;const statuses=Object.fromEntries(specs.map(([key])=>[key,state(values[key],profile[key])]));const bad=Object.values(statuses).filter(x=>x==='bad').length;const warn=Object.values(statuses).filter(x=>x==='warn').length;const mood=bad>=2?'sad':bad===1||warn>=2?'worried':warn===1?'neutral':'happy';const messages={happy:['Feeling great!','Everything feels just right.'],neutral:['A little unsure','One thing could be better.'],worried:['Not feeling my best','Something needs attention.'],sad:['I need some help','Several conditions are outside my comfort zone.']};$('mood').textContent=messages[mood][0];$('mood-sub').textContent=messages[mood][1];currentMood=mood;renderFace(mood,frame);for(const [key,label,unit] of specs){$('value-'+key).textContent=values[key]+unit;$('range-'+key).textContent='Target '+profile[key][0]+'–'+profile[key][1]+unit;const s=$('status-'+key);s.textContent=statuses[key];s.className='status '+statuses[key]}const problems=[];for(const [key,label,unit] of specs){if(statuses[key]==='good')continue;problems.push((values[key]<profile[key][0]?'Too low: ':'Too high: ')+label.toLowerCase())}$('diagnosis').textContent=problems.length?problems.join(' · '):'✓ All readings are within the selected plant’s sample ranges.'}
+function update(){
+ const profile=profiles[select.value],personality=personalities[select.value];
+ $('plant-label').textContent=select.value.toUpperCase()+' · '+personality.title.toUpperCase();
+ $('description').textContent=profile.description;
+ const statuses=Object.fromEntries(specs.map(([key])=>[key,state(values[key],profile[key])]));
+ const bad=Object.values(statuses).filter(x=>x==='bad').length;
+ const warn=Object.values(statuses).filter(x=>x==='warn').length;
+ const mood=bad>=2?'sad':bad===1||warn>=2?'worried':warn===1?'neutral':'happy';
+ const speciesChanged=previousSpecies!==select.value, moodChanged=previousMood!==mood;
+ if(speciesChanged||moodChanged){messageIndex=0;moodSince=performance.now()}
+ previousSpecies=select.value;previousMood=mood;
+ const messages=personality[mood];
+ const headline=messages[messageIndex%messages.length];
+ const subtitles={
+  happy:'Comfortable and content.',neutral:'A small adjustment may help.',
+  worried:'Check the readings below.',sad:'Several conditions need attention.'
+ };
+ $('mood').textContent=headline;
+ $('mood-sub').textContent=subtitles[mood];
+ currentMood=mood;renderFace(mood,frame);
+ for(const [key,label,unit] of specs){
+  $('value-'+key).textContent=values[key]+unit;
+  $('range-'+key).textContent='Target '+profile[key][0]+'–'+profile[key][1]+unit;
+  const el=$('status-'+key);el.textContent=statuses[key];el.className='status '+statuses[key];
+ }
+ const problems=[];
+ for(const [key,label] of specs){
+  if(statuses[key]==='good')continue;
+  problems.push((values[key]<profile[key][0]?'Too low: ':'Too high: ')+label.toLowerCase());
+ }
+ $('diagnosis').textContent=problems.length?problems.join(' · '):'✓ All readings are within the selected plant’s sample ranges.';
+}
+function rotateDialogue(){
+ const messages=personalities[select.value][currentMood];
+ if(messages.length>1){messageIndex=(messageIndex+1)%messages.length;$('mood').textContent=messages[messageIndex]}
+}
+setInterval(rotateDialogue,6500);
 for(const [key,label,unit,min,max] of specs){const el=document.createElement('div');el.className='setting';el.innerHTML='<div class="row"><strong>'+label+'</strong><span class="value" id="value-'+key+'"></span></div><div class="row"><div class="target" id="range-'+key+'"></div><span class="status" id="status-'+key+'"></span></div><input type="range" aria-label="'+label+'" min="'+min+'" max="'+max+'" value="'+values[key]+'" id="slider-'+key+'">';$('controls').append(el);$('slider-'+key).addEventListener('input',e=>{values[key]=Number(e.target.value);update()})}
 select.addEventListener('change',update);function setReadings(soil,light,temp){Object.assign(values,{soil,light,temp});for(const [key] of specs)$('slider-'+key).value=values[key];update()}$('healthy').onclick=()=>{const p=profiles[select.value];setReadings(...['soil','light','temp'].map(k=>Math.round((p[k][0]+p[k][1])/2)))};$('thirsty').onclick=()=>{const p=profiles[select.value];setReadings(5,Math.round((p.light[0]+p.light[1])/2),Math.round((p.temp[0]+p.temp[1])/2))};$('stressed').onclick=()=>setReadings(0,0,38);update();
 </script></body></html>
