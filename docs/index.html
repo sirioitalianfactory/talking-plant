@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111a17"><title>Talking Plant · Your little green companion</title><style>
-:root{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#edf4e8;background:#101815}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% 20%,#254233 0%,#101815 65%);min-height:100vh}main{max-width:1120px;margin:auto;padding:34px 22px 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:20px;font-weight:800;letter-spacing:-.04em}.brand span{color:#8bdb9e}.pill{border:1px solid #4b6657;background:#20342b;color:#c5f0ce;border-radius:30px;padding:9px 14px;font-size:12px}.hero{margin:48px 0 26px}.eyebrow{color:#a4d4b1;font-size:12px;text-transform:uppercase;letter-spacing:.24em;font-weight:700}h1{font-size:clamp(36px,6vw,60px);letter-spacing:-.06em;margin:12px 0 10px;line-height:1.05}p{color:#a7b9ab;line-height:1.6}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.panel{border:1px solid #385345;border-radius:28px;background:#1b2922d9;padding:25px;box-shadow:0 24px 70px #0002}.display{min-height:445px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#304e3c,#16241d 67%);text-align:center}.face{cursor:pointer;touch-action:manipulation;transition:transform .18s ease}.face:active{transform:scale(.96)}.face:focus-visible{outline:3px solid #b6efad;outline-offset:5px;border-radius:20px}.face{width:min(290px,70vw);height:min(290px,70vw);image-rendering:pixelated;filter:drop-shadow(0 0 28px #79da9550)}.mood{font-size:26px;font-weight:800;letter-spacing:-.03em;margin:8px 0 0}.subtitle{font-size:14px;margin-top:8px}.tag{font-size:11px;color:#9fb9a6;letter-spacing:.16em;text-transform:uppercase}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}h2{margin:0;font-size:19px}select{appearance:none;border:1px solid #4c6656;border-radius:12px;background:#2a3c31;color:white;padding:12px 34px 12px 14px;font-size:15px;max-width:100%}.setting{padding:20px 0;border-bottom:1px solid #344b3d}.setting:last-of-type{border-bottom:0}.value{font-weight:700;color:#d4efdb}.target{font-size:12px;color:#92ae9b;margin-top:6px}input[type=range]{width:100%;accent-color:#9bdbac;margin:17px 0 0;cursor:pointer}.status{font-size:11px;border-radius:15px;padding:4px 9px;background:#355343;color:#b8edc6}.status.warn{background:#554a2c;color:#f7dc92}.status.bad{background:#603c3d;color:#ffaaaa}.diagnosis{padding:17px 19px;border:1px solid #49644f;background:#293e30;border-radius:16px;color:#d9e8d8;margin-top:18px;line-height:1.6;font-size:14px}.bond{width:100%;max-width:310px;margin:15px auto 0;text-align:left}.bond-head{display:flex;justify-content:space-between;font-size:12px;color:#c8e6cc;margin-bottom:7px}.bond-track{height:9px;border-radius:20px;background:#30483a;overflow:hidden}.bond-fill{height:100%;width:0%;background:linear-gradient(90deg,#6bbf84,#c3ed98);transition:width .45s ease}.interaction-note{min-height:22px;font-size:12px;color:#b9d9be;margin-top:9px}.foot{font-size:12px;color:#799183;margin-top:22px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}button{background:#304a39;color:#dcf7df;border:1px solid #52745b;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:650}button:hover{background:#3b6246}@media(max-width:760px){.layout{grid-template-columns:1fr}.display{min-height:380px}.hero{margin-top:30px}.panel{padding:20px}}
-</style></head><body><main><header class="top"><div class="brand">✳ talking<span>plant</span></div><div class="pill">● Interactive simulator</div></header><section class="hero"><div class="eyebrow">A little companion with big feelings</div><h1>How's your plant<br>feeling today?</h1><p>Give your plant a face. Adjust its environment and watch its mood change.</p></section><div class="layout"><section class="panel display"><div class="tag" id="plant-label">MONSTERA</div><canvas class="face" id="face" width="320" height="320" role="button" tabindex="0" aria-label="Tap to interact with your plant"></canvas><div class="mood" id="mood">Feeling great!</div><div class="subtitle" id="mood-sub">Everything feels just right.</div><div class="bond"><div class="bond-head"><span>Friendship · <span id="bond-level">Seedling</span></span><strong id="bond-score">0 / 100</strong></div><div class="bond-track"><div class="bond-fill" id="bond-fill"></div></div><div class="interaction-note" id="interaction-note" aria-live="polite">Tap your plant to say hello.</div></div><div class="buttons"><button id="water">💧 Water plant</button><button id="healthy">Happy plant</button><button id="thirsty">Needs water</button><button id="stressed">Stressed plant</button></div></section><section class="panel"><div class="row"><h2>Plant environment</h2><select id="plant" aria-label="Choose plant"></select></div><p style="font-size:13px" id="description"></p><div id="controls"></div><div class="diagnosis" id="diagnosis" aria-live="polite"></div><div class="foot">Demo interactions, watering and friendship are simulated and saved in this browser. No physical watering occurs. Demo readings are simulated. Sample plant ranges are illustrative and require species-specific validation and sensor calibration.</div></section></div></main><script>
+:root{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#edf4e8;background:#101815}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% 20%,#254233 0%,#101815 65%);min-height:100vh}main{max-width:1120px;margin:auto;padding:34px 22px 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:20px;font-weight:800;letter-spacing:-.04em}.brand span{color:#8bdb9e}.pill{border:1px solid #4b6657;background:#20342b;color:#c5f0ce;border-radius:30px;padding:9px 14px;font-size:12px}.hero{margin:48px 0 26px}.eyebrow{color:#a4d4b1;font-size:12px;text-transform:uppercase;letter-spacing:.24em;font-weight:700}h1{font-size:clamp(36px,6vw,60px);letter-spacing:-.06em;margin:12px 0 10px;line-height:1.05}p{color:#a7b9ab;line-height:1.6}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.panel{border:1px solid #385345;border-radius:28px;background:#1b2922d9;padding:25px;box-shadow:0 24px 70px #0002}.display{min-height:445px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#304e3c,#16241d 67%);text-align:center}.face{cursor:pointer;touch-action:manipulation;transition:transform .18s ease}.face:active{transform:scale(.96)}.face:focus-visible{outline:3px solid #b6efad;outline-offset:5px;border-radius:20px}.face{width:min(290px,70vw);height:min(290px,70vw);image-rendering:pixelated;filter:drop-shadow(0 0 28px #79da9550)}.mood{font-size:26px;font-weight:800;letter-spacing:-.03em;margin:8px 0 0}.subtitle{font-size:14px;margin-top:8px}.tag{font-size:11px;color:#9fb9a6;letter-spacing:.16em;text-transform:uppercase}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}h2{margin:0;font-size:19px}select{appearance:none;border:1px solid #4c6656;border-radius:12px;background:#2a3c31;color:white;padding:12px 34px 12px 14px;font-size:15px;max-width:100%}.setting{padding:20px 0;border-bottom:1px solid #344b3d}.setting:last-of-type{border-bottom:0}.value{font-weight:700;color:#d4efdb}.target{font-size:12px;color:#92ae9b;margin-top:6px}input[type=range]{width:100%;accent-color:#9bdbac;margin:17px 0 0;cursor:pointer}.status{font-size:11px;border-radius:15px;padding:4px 9px;background:#355343;color:#b8edc6}.status.warn{background:#554a2c;color:#f7dc92}.status.bad{background:#603c3d;color:#ffaaaa}.diagnosis{padding:17px 19px;border:1px solid #49644f;background:#293e30;border-radius:16px;color:#d9e8d8;margin-top:18px;line-height:1.6;font-size:14px}.interaction-note{min-height:22px;font-size:12px;color:#b9d9be;margin-top:9px}.foot{font-size:12px;color:#799183;margin-top:22px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}button{background:#304a39;color:#dcf7df;border:1px solid #52745b;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:650}button:hover{background:#3b6246}@media(max-width:760px){.layout{grid-template-columns:1fr}.display{min-height:380px}.hero{margin-top:30px}.panel{padding:20px}}
+</style></head><body><main><header class="top"><div class="brand">✳ talking<span>plant</span></div><div class="pill">● Quiet companion demo</div></header><section class="hero"><div class="eyebrow">A little companion with big feelings</div><h1>How's your plant<br>feeling today?</h1><p>A quiet little companion. Watch it thrive, and check in whenever you like.</p></section><div class="layout"><section class="panel display"><div class="tag" id="plant-label">MONSTERA</div><canvas class="face" id="face" width="320" height="320" role="button" tabindex="0" aria-label="Tap to interact with your plant"></canvas><div class="mood" id="mood">Feeling great!</div><div class="subtitle" id="mood-sub">Everything feels just right.</div><div class="interaction-note" id="interaction-note" aria-live="polite"></div><div class="buttons"><button id="water">💧 Water plant</button><button id="healthy">Happy plant</button><button id="thirsty">Needs water</button><button id="stressed">Stressed plant</button></div></section><section class="panel"><div class="row"><h2>Plant environment</h2><select id="plant" aria-label="Choose plant"></select></div><p style="font-size:13px" id="description"></p><div id="controls"></div><div class="diagnosis" id="diagnosis" aria-live="polite"></div><div class="foot">Interactions and watering are simulated; no physical watering occurs. Readings are simulated. Sample plant ranges are illustrative and require species-specific validation and sensor calibration.</div></section></div></main><script>
 const profiles={
 'Monstera':{soil:[35,65],light:[300,800],temp:[18,28],description:'Bright indirect light and moderately moist soil.'},
 'Snake Plant':{soil:[20,45],light:[150,700],temp:[16,30],description:'Drought-tolerant, adaptable to different light levels.'},
@@ -9,21 +9,21 @@ const profiles={
 };
 const personalities={
  'Monstera':{
-  title:'The optimist',tempo:420,blink:4700,
+  title:'The optimist',tempo:630,blink:5200,
   happy:['Life is looking leafy!','New day, new leaf.','I could grow all day!'],
   neutral:['A little adjustment, perhaps?','Still smiling, just checking in.'],
   worried:['My leaves are sending signals!','Something feels a little off.'],
   sad:['I could really use some care.','My jungle spirit needs a boost.']
  },
  'Snake Plant':{
-  title:'The stoic',tempo:850,blink:7200,
+  title:'The stoic',tempo:1100,blink:7600,
   happy:['All systems green.','Quietly thriving.','Steady as ever.'],
   neutral:['Noted.','A minor deviation.'],
   worried:['Conditions require attention.','I have concerns.'],
   sad:['Even I have limits.','This is beyond my comfort zone.']
  },
  'Fiddle-leaf Fig':{
-  title:'The diva',tempo:260,blink:2800,
+  title:'The diva',tempo:540,blink:4100,
   happy:['Obviously, I look fabulous.','A standing ovation, please!'],
   neutral:['Is this really my ideal lighting?','I expected perfection.'],
   worried:['The audacity of this climate!','I demand better conditions!'],
@@ -37,30 +37,20 @@ function state(value,[min,max]){if(value>=min&&value<=max)return 'good';const to
 // 40 × 40 pixel-art character, rendered at native resolution and scaled crisply.
 let currentMood='happy', frame=0, lastFrame=0, moodSince=0, messageIndex=0, previousSpecies='', previousMood='';
 let reactionUntil=0,reactionType='',lastInteraction=0;
-const bondKey='talking-plant-v4-bond';
-let bonds={};
-try{const saved=JSON.parse(localStorage.getItem(bondKey)||'{}');if(saved&&typeof saved==='object')bonds=saved}catch(e){}
-function bondValue(){return Math.max(0,Math.min(100,Number(bonds[select.value])||0))}
-function paintBond(){
- const value=bondValue(),level=value>=80?'Best buds':value>=50?'Growing together':value>=20?'Sprout':'Seedling';
- $('bond-level').textContent=level;$('bond-score').textContent=value+' / 100';$('bond-fill').style.width=value+'%';
-}
-function reward(amount,message,type){
+function react(message,type){
  const now=performance.now();
- if(now-lastInteraction<650)return;
+ if(now-lastInteraction<900)return;
  lastInteraction=now;
- const old=bondValue();bonds[select.value]=Math.min(100,old+amount);
- try{localStorage.setItem(bondKey,JSON.stringify(bonds))}catch(e){}
- reactionType=type;reactionUntil=now+1600;
- $('interaction-note').textContent=message+(bonds[select.value]>old?' · +'+(bonds[select.value]-old)+' friendship':'');
- paintBond();
+ reactionType=type;reactionUntil=now+1400;
+ $('interaction-note').textContent=message;
+ clearTimeout(react.clearTimer);
+ react.clearTimer=setTimeout(()=>{$('interaction-note').textContent=''},3200);
 }
-
 function renderFace(mood, tick=0){
  const canvas=$('face'),ctx=canvas.getContext('2d');canvas.width=320;canvas.height=320;
  ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,320,320);
  const personality=personalities[select.value];
- const u=8, bounce=Math.round(Math.sin(tick/personality.tempo)*(select.value==='Fiddle-leaf Fig'?1.5:.7)),
+ const u=8, bounce=Math.round(Math.sin(tick/personality.tempo)*.7),
  blink=(tick%personality.blink<(select.value==='Snake Plant'?95:145)), dark='#263b30';
  const palettes={
  happy:['#a8ecab','#75ca87','#4d9f69','#d4ffbe'],
@@ -156,7 +146,7 @@ function renderFace(mood, tick=0){
   }
  }
  // Tiny floating pixel sparkles when thriving
- if(mood==='happy'){
+ if(mood==='happy'&&Math.floor(tick/3500)%3===0){
   const phase=Math.floor(tick/500)%4;
   px(3,12-phase,2,2,'#b6efad');px(35,15+(phase%2),2,2,'#e5f4b0');
   px(4,10-phase,1,1,'#fff8c2');
@@ -186,7 +176,7 @@ function update(){
  };
  $('mood').textContent=headline;
  $('mood-sub').textContent=subtitles[mood];
- currentMood=mood;renderFace(mood,frame);paintBond();
+ currentMood=mood;renderFace(mood,frame);
  for(const [key,label,unit] of specs){
   $('value-'+key).textContent=values[key]+unit;
   $('range-'+key).textContent='Target '+profile[key][0]+'–'+profile[key][1]+unit;
@@ -203,9 +193,10 @@ function rotateDialogue(){
  const messages=personalities[select.value][currentMood];
  if(messages.length>1){messageIndex=(messageIndex+1)%messages.length;$('mood').textContent=messages[messageIndex]}
 }
-setInterval(rotateDialogue,6500);
+// Quiet by default: occasional variation only while the page is visible.
+setInterval(()=>{if(!document.hidden)rotateDialogue()},22000);
 for(const [key,label,unit,min,max] of specs){const el=document.createElement('div');el.className='setting';el.innerHTML='<div class="row"><strong>'+label+'</strong><span class="value" id="value-'+key+'"></span></div><div class="row"><div class="target" id="range-'+key+'"></div><span class="status" id="status-'+key+'"></span></div><input type="range" aria-label="'+label+'" min="'+min+'" max="'+max+'" value="'+values[key]+'" id="slider-'+key+'">';$('controls').append(el);$('slider-'+key).addEventListener('input',e=>{values[key]=Number(e.target.value);update()})}
-select.addEventListener('change',()=>{$('interaction-note').textContent='Tap your plant to say hello.';update()});
+select.addEventListener('change',()=>{$('interaction-note').textContent='';update()});
 function greet(){
  const lines={
  'Monstera':['A leafy little high-five!','You made my day brighter!'],
@@ -213,19 +204,18 @@ function greet(){
  'Fiddle-leaf Fig':['Ah, my adoring public!','Finally, some attention!']
  };
  const options=lines[select.value];
- reward(3,options[Math.floor(Math.random()*options.length)],'tap');
+ react(options[Math.floor(Math.random()*options.length)],'tap');
 }
 $('face').addEventListener('click',greet);
 $('face').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();greet()}});
 $('water').addEventListener('click',()=>{
  const p=profiles[select.value];
  if(values.soil>=p.soil[1]){$('interaction-note').textContent='Soil is already moist enough — no extra water needed.';return}
- const before=values.soil;
  values.soil=Math.min(100,values.soil+12);
  $('slider-soil').value=values.soil;
  update();
  const message=values.soil>p.soil[1]?'Careful — the soil is getting too wet!':'Refreshing! My soil moisture is rising.';
- reward(values.soil<=p.soil[1]?7:0,message,'water');
+ react(message,'water');
 });
 function setReadings(soil,light,temp){Object.assign(values,{soil,light,temp});for(const [key] of specs)$('slider-'+key).value=values[key];update()}$('healthy').onclick=()=>{const p=profiles[select.value];setReadings(...['soil','light','temp'].map(k=>Math.round((p[k][0]+p[k][1])/2)))};$('thirsty').onclick=()=>{const p=profiles[select.value];setReadings(5,Math.round((p.light[0]+p.light[1])/2),Math.round((p.temp[0]+p.temp[1])/2))};$('stressed').onclick=()=>setReadings(0,0,38);update();
 </script></body></html>
