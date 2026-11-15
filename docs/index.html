@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#111a17"><title>Talking Plant · Your little green companion</title><style>
 :root{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;color:#edf4e8;background:#101815}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% 20%,#254233 0%,#101815 65%);min-height:100vh}main{max-width:1120px;margin:auto;padding:34px 22px 70px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-size:20px;font-weight:800;letter-spacing:-.04em}.brand span{color:#8bdb9e}.pill{border:1px solid #4b6657;background:#20342b;color:#c5f0ce;border-radius:30px;padding:9px 14px;font-size:12px}.hero{margin:48px 0 26px}.eyebrow{color:#a4d4b1;font-size:12px;text-transform:uppercase;letter-spacing:.24em;font-weight:700}h1{font-size:clamp(36px,6vw,60px);letter-spacing:-.06em;margin:12px 0 10px;line-height:1.05}p{color:#a7b9ab;line-height:1.6}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:22px}.panel{border:1px solid #385345;border-radius:28px;background:#1b2922d9;padding:25px;box-shadow:0 24px 70px #0002}.display{min-height:445px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 30%,#304e3c,#16241d 67%);text-align:center}.face{width:min(290px,70vw);height:min(290px,70vw);image-rendering:pixelated;filter:drop-shadow(0 0 28px #79da9550)}.mood{font-size:26px;font-weight:800;letter-spacing:-.03em;margin:8px 0 0}.subtitle{font-size:14px;margin-top:8px}.tag{font-size:11px;color:#9fb9a6;letter-spacing:.16em;text-transform:uppercase}.row{display:flex;justify-content:space-between;align-items:center;gap:10px}h2{margin:0;font-size:19px}select{appearance:none;border:1px solid #4c6656;border-radius:12px;background:#2a3c31;color:white;padding:12px 34px 12px 14px;font-size:15px;max-width:100%}.setting{padding:20px 0;border-bottom:1px solid #344b3d}.setting:last-of-type{border-bottom:0}.value{font-weight:700;color:#d4efdb}.target{font-size:12px;color:#92ae9b;margin-top:6px}input[type=range]{width:100%;accent-color:#9bdbac;margin:17px 0 0;cursor:pointer}.status{font-size:11px;border-radius:15px;padding:4px 9px;background:#355343;color:#b8edc6}.status.warn{background:#554a2c;color:#f7dc92}.status.bad{background:#603c3d;color:#ffaaaa}.diagnosis{padding:17px 19px;border:1px solid #49644f;background:#293e30;border-radius:16px;color:#d9e8d8;margin-top:18px;line-height:1.6;font-size:14px}.foot{font-size:12px;color:#799183;margin-top:22px}.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}button{background:#304a39;color:#dcf7df;border:1px solid #52745b;border-radius:12px;padding:10px 14px;cursor:pointer;font-weight:650}button:hover{background:#3b6246}@media(max-width:760px){.layout{grid-template-columns:1fr}.display{min-height:380px}.hero{margin-top:30px}.panel{padding:20px}}
-</style></head><body><main><header class="top"><div class="brand">✳ talking<span>plant</span></div><div class="pill">● Interactive simulator</div></header><section class="hero"><div class="eyebrow">A little companion with big feelings</div><h1>How's your plant<br>feeling today?</h1><p>Give your plant a face. Adjust its environment and watch its mood change.</p></section><div class="layout"><section class="panel display"><div class="tag" id="plant-label">MONSTERA</div><canvas class="face" id="face" width="160" height="160" role="img" aria-label="Pixel face showing plant mood"></canvas><div class="mood" id="mood">Feeling great!</div><div class="subtitle" id="mood-sub">Everything feels just right.</div><div class="buttons"><button id="healthy">Happy plant</button><button id="thirsty">Needs water</button><button id="stressed">Stressed plant</button></div></section><section class="panel"><div class="row"><h2>Plant environment</h2><select id="plant" aria-label="Choose plant"></select></div><p style="font-size:13px" id="description"></p><div id="controls"></div><div class="diagnosis" id="diagnosis" aria-live="polite"></div><div class="foot">Demo readings are simulated. Sample plant ranges are illustrative and require species-specific validation and sensor calibration.</div></section></div></main><script>
+</style></head><body><main><header class="top"><div class="brand">✳ talking<span>plant</span></div><div class="pill">● Interactive simulator</div></header><section class="hero"><div class="eyebrow">A little companion with big feelings</div><h1>How's your plant<br>feeling today?</h1><p>Give your plant a face. Adjust its environment and watch its mood change.</p></section><div class="layout"><section class="panel display"><div class="tag" id="plant-label">MONSTERA</div><canvas class="face" id="face" width="320" height="320" role="img" aria-label="Pixel face showing plant mood"></canvas><div class="mood" id="mood">Feeling great!</div><div class="subtitle" id="mood-sub">Everything feels just right.</div><div class="buttons"><button id="healthy">Happy plant</button><button id="thirsty">Needs water</button><button id="stressed">Stressed plant</button></div></section><section class="panel"><div class="row"><h2>Plant environment</h2><select id="plant" aria-label="Choose plant"></select></div><p style="font-size:13px" id="description"></p><div id="controls"></div><div class="diagnosis" id="diagnosis" aria-live="polite"></div><div class="foot">Demo readings are simulated. Sample plant ranges are illustrative and require species-specific validation and sensor calibration.</div></section></div></main><script>
 const profiles={
 'Monstera':{soil:[35,65],light:[300,800],temp:[18,28],description:'Bright indirect light and moderately moist soil.'},
 'Snake Plant':{soil:[20,45],light:[150,700],temp:[16,30],description:'Drought-tolerant, adaptable to different light levels.'},
@@ -11,8 +11,69 @@ const specs=[['soil','Soil moisture','%',0,100],['light','Ambient light','lux',0
 const values={soil:50,light:500,temp:23};
 const $=id=>document.getElementById(id);const select=$('plant');Object.keys(profiles).forEach(name=>{const option=document.createElement('option');option.textContent=name;option.value=name;select.append(option)});
 function state(value,[min,max]){if(value>=min&&value<=max)return 'good';const tolerance=(max-min)*.15;return value>=min-tolerance&&value<=max+tolerance?'warn':'bad'}
-function renderFace(mood){const canvas=$('face'),ctx=canvas.getContext('2d');ctx.clearRect(0,0,160,160);const color={happy:'#9ee7aa',neutral:'#e7d58e',worried:'#f4b27e',sad:'#ed8994'}[mood];function pixel(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x*8,y*8,w*8,h*8)}pixel(2,2,16,16,color);pixel(5,7,3,3,'#1b2a22');pixel(12,7,3,3,'#1b2a22');const dark='#1b2a22';if(mood==='happy'){pixel(6,13,8,1,dark);pixel(5,12,1,1,dark);pixel(14,12,1,1,dark)}else if(mood==='neutral'){pixel(6,13,8,1,dark)}else if(mood==='worried'){pixel(6,13,8,1,dark);pixel(13,12,1,1,dark);pixel(5,5,3,1,dark);pixel(12,5,3,1,dark)}else{pixel(6,12,8,1,dark);pixel(5,13,1,2,dark);pixel(14,13,1,2,dark);pixel(5,5,3,1,dark);pixel(12,5,3,1,dark)}}
-function update(){const profile=profiles[select.value];$('plant-label').textContent=select.value.toUpperCase();$('description').textContent=profile.description;const statuses=Object.fromEntries(specs.map(([key])=>[key,state(values[key],profile[key])]));const bad=Object.values(statuses).filter(x=>x==='bad').length;const warn=Object.values(statuses).filter(x=>x==='warn').length;const mood=bad>=2?'sad':bad===1||warn>=2?'worried':warn===1?'neutral':'happy';const messages={happy:['Feeling great!','Everything feels just right.'],neutral:['A little unsure','One thing could be better.'],worried:['Not feeling my best','Something needs attention.'],sad:['I need some help','Several conditions are outside my comfort zone.']};$('mood').textContent=messages[mood][0];$('mood-sub').textContent=messages[mood][1];renderFace(mood);for(const [key,label,unit] of specs){$('value-'+key).textContent=values[key]+unit;$('range-'+key).textContent='Target '+profile[key][0]+'–'+profile[key][1]+unit;const s=$('status-'+key);s.textContent=statuses[key];s.className='status '+statuses[key]}const problems=[];for(const [key,label,unit] of specs){if(statuses[key]==='good')continue;problems.push((values[key]<profile[key][0]?'Too low: ':'Too high: ')+label.toLowerCase())}$('diagnosis').textContent=problems.length?problems.join(' · '):'✓ All readings are within the selected plant’s sample ranges.'}
+// 40 × 40 pixel-art character, rendered at native resolution and scaled crisply.
+let currentMood='happy', frame=0, lastFrame=0;
+function renderFace(mood, tick=0){
+ const canvas=$('face'),ctx=canvas.getContext('2d');canvas.width=320;canvas.height=320;
+ ctx.imageSmoothingEnabled=false;ctx.clearRect(0,0,320,320);
+ const u=8, bounce=Math.round(Math.sin(tick/420)*.7), blink=(tick%4700<135), dark='#263b30';
+ const palettes={
+ happy:['#a8ecab','#75ca87','#4d9f69','#d4ffbe'],
+ neutral:['#e9d99b','#c3b47a','#938a60','#fff0bd'],
+ worried:['#f4bb91','#d99878','#b87964','#ffe0b5'],
+ sad:['#eaa3ad','#cb7f94','#a75c7a','#ffd0cf']};
+ const [base,shade,deep,shine]=palettes[mood];
+ const px=(x,y,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(x*u,(y+bounce)*u,w*u,h*u)};
+ // Shadow and terra-cotta pot
+ px(11,36,18,2,'#14221b');px(12,31,16,5,'#b47b58');px(10,29,20,3,'#dca17a');
+ px(13,32,14,1,'#e8b18a');px(14,35,12,1,'#95674d');
+ // Stem, two asymmetrical leaves, and tiny highlights
+ px(19,8,2,8,'#4f9d64');px(11,6,7,2,'#4e9c64');px(9,4,7,2,'#69bb73');
+ px(8,2,5,2,'#83d98b');px(10,8,8,2,'#3f8759');
+ px(22,8,7,2,'#4e9c64');px(24,6,7,2,'#6fc67a');
+ px(27,4,5,2,'#94e09a');px(21,10,6,2,'#3d8656');
+ px(11,4,3,1,'#b7f4aa');px(28,5,2,1,'#c4f8af');
+ // Rounded pixel silhouette, with edge lighting and shaded cheeks
+ px(11,12,18,2,shade);px(8,14,24,2,shade);px(6,16,28,11,base);
+ px(8,27,24,3,base);px(11,30,18,2,shade);
+ px(6,18,2,7,shine);px(8,15,3,2,shine);
+ px(29,17,3,10,shade);px(26,27,5,3,shade);
+ px(11,30,4,1,shine);px(17,13,6,1,shine);
+ // Freckles and blush
+ px(9,24,5,2,mood==='sad'?'#d77991':'#ed9b9d');
+ px(26,24,5,2,mood==='sad'?'#d77991':'#ed9b9d');
+ px(10,24,2,1,'#f8c3ba');px(28,24,2,1,'#f8c3ba');
+ if(blink){px(12,20,6,1,dark);px(23,20,6,1,dark)}
+ else {
+  const eyeY=mood==='sad'?19:18;
+  px(12,eyeY,6,6,dark);px(23,eyeY,6,6,dark);
+  px(13,eyeY+1,2,2,'#ffffff');px(24,eyeY+1,2,2,'#ffffff');
+  px(16,eyeY+4,1,1,'#5d7868');px(27,eyeY+4,1,1,'#5d7868');
+ }
+ if(mood==='happy'){
+  px(17,26,6,1,dark);px(15,25,2,1,dark);px(23,25,2,1,dark);
+  px(18,27,4,1,'#f3a4a4');
+ }else if(mood==='neutral'){px(17,26,6,1,dark)}
+ else if(mood==='worried'){
+  px(17,26,6,2,dark);px(18,27,4,1,'#f9d6c8');
+  px(12,16,6,1,deep);px(23,15,6,1,deep);
+  px(31,18,2,3,'#7fc9db');px(32,21,2,3,'#4ca4be');
+ }else{
+  px(16,27,2,1,dark);px(18,26,4,1,dark);px(22,27,2,1,dark);
+  px(12,16,6,1,deep);px(23,16,6,1,deep);
+  const drop=Math.floor((tick/180)%5);
+  px(11,24+drop,2,3,'#7fc9e8');px(28,24+(drop+2)%5,2,3,'#7fc9e8');
+ }
+ // Tiny floating pixel sparkles when thriving
+ if(mood==='happy'){
+  const phase=Math.floor(tick/500)%4;
+  px(3,12-phase,2,2,'#b6efad');px(35,15+(phase%2),2,2,'#e5f4b0');
+  px(4,10-phase,1,1,'#fff8c2');
+ }
+}
+function animateFace(t){if(t-lastFrame>70){frame=t;renderFace(currentMood,t);lastFrame=t}requestAnimationFrame(animateFace)}
+requestAnimationFrame(animateFace);
+function update(){const profile=profiles[select.value];$('plant-label').textContent=select.value.toUpperCase();$('description').textContent=profile.description;const statuses=Object.fromEntries(specs.map(([key])=>[key,state(values[key],profile[key])]));const bad=Object.values(statuses).filter(x=>x==='bad').length;const warn=Object.values(statuses).filter(x=>x==='warn').length;const mood=bad>=2?'sad':bad===1||warn>=2?'worried':warn===1?'neutral':'happy';const messages={happy:['Feeling great!','Everything feels just right.'],neutral:['A little unsure','One thing could be better.'],worried:['Not feeling my best','Something needs attention.'],sad:['I need some help','Several conditions are outside my comfort zone.']};$('mood').textContent=messages[mood][0];$('mood-sub').textContent=messages[mood][1];currentMood=mood;renderFace(mood,frame);for(const [key,label,unit] of specs){$('value-'+key).textContent=values[key]+unit;$('range-'+key).textContent='Target '+profile[key][0]+'–'+profile[key][1]+unit;const s=$('status-'+key);s.textContent=statuses[key];s.className='status '+statuses[key]}const problems=[];for(const [key,label,unit] of specs){if(statuses[key]==='good')continue;problems.push((values[key]<profile[key][0]?'Too low: ':'Too high: ')+label.toLowerCase())}$('diagnosis').textContent=problems.length?problems.join(' · '):'✓ All readings are within the selected plant’s sample ranges.'}
 for(const [key,label,unit,min,max] of specs){const el=document.createElement('div');el.className='setting';el.innerHTML='<div class="row"><strong>'+label+'</strong><span class="value" id="value-'+key+'"></span></div><div class="row"><div class="target" id="range-'+key+'"></div><span class="status" id="status-'+key+'"></span></div><input type="range" aria-label="'+label+'" min="'+min+'" max="'+max+'" value="'+values[key]+'" id="slider-'+key+'">';$('controls').append(el);$('slider-'+key).addEventListener('input',e=>{values[key]=Number(e.target.value);update()})}
 select.addEventListener('change',update);function setReadings(soil,light,temp){Object.assign(values,{soil,light,temp});for(const [key] of specs)$('slider-'+key).value=values[key];update()}$('healthy').onclick=()=>{const p=profiles[select.value];setReadings(...['soil','light','temp'].map(k=>Math.round((p[k][0]+p[k][1])/2)))};$('thirsty').onclick=()=>{const p=profiles[select.value];setReadings(5,Math.round((p.light[0]+p.light[1])/2),Math.round((p.temp[0]+p.temp[1])/2))};$('stressed').onclick=()=>setReadings(0,0,38);update();
 </script></body></html>
