@@ -24,21 +24,45 @@ function renderFace(mood, tick=0){
  sad:['#eaa3ad','#cb7f94','#a75c7a','#ffd0cf']};
  const [base,shade,deep,shine]=palettes[mood];
  const px=(x,y,w,h,c)=>{ctx.fillStyle=c;ctx.fillRect(x*u,(y+bounce)*u,w*u,h*u)};
- // Shadow and terra-cotta pot
- px(11,36,18,2,'#14221b');px(12,31,16,5,'#b47b58');px(10,29,20,3,'#dca17a');
- px(13,32,14,1,'#e8b18a');px(14,35,12,1,'#95674d');
- // Stem, two asymmetrical leaves, and tiny highlights
- px(19,8,2,8,'#4f9d64');px(11,6,7,2,'#4e9c64');px(9,4,7,2,'#69bb73');
- px(8,2,5,2,'#83d98b');px(10,8,8,2,'#3f8759');
- px(22,8,7,2,'#4e9c64');px(24,6,7,2,'#6fc67a');
- px(27,4,5,2,'#94e09a');px(21,10,6,2,'#3d8656');
- px(11,4,3,1,'#b7f4aa');px(28,5,2,1,'#c4f8af');
- // Rounded pixel silhouette, with edge lighting and shaded cheeks
- px(11,12,18,2,shade);px(8,14,24,2,shade);px(6,16,28,11,base);
- px(8,27,24,3,base);px(11,30,18,2,shade);
- px(6,18,2,7,shine);px(8,15,3,2,shine);
- px(29,17,3,10,shade);px(26,27,5,3,shade);
- px(11,30,4,1,shine);px(17,13,6,1,shine);
+ // Each species has a unique silhouette, leaf structure, and pot.
+ const species=select.value;
+ px(10,36,20,2,'#14221b');
+ if(species==='Monstera'){
+  // Wide ceramic planter, climbing stem and split tropical foliage.
+  px(11,30,18,6,'#bc856b');px(9,29,22,3,'#e3ac88');px(13,33,14,2,'#96634f');
+  px(19,8,2,9,'#468b55');px(11,7,6,2,'#397b4d');px(8,5,8,3,'#61b976');
+  px(7,3,8,3,'#7bd18b');px(9,3,2,2,'#b1f0a3');px(8,7,2,3,'#254e38');
+  px(13,6,2,3,'#254e38');px(15,8,3,2,'#3d925a');
+  px(23,8,7,2,'#3b8954');px(25,5,7,4,'#72c881');px(28,3,5,4,'#8fdf96');
+  px(31,8,2,3,'#254e38');px(25,6,2,2,'#254e38');px(21,10,4,2,'#397e4e');
+  // Large soft round tropical face.
+  px(11,12,18,2,shade);px(8,14,24,2,shade);px(6,16,28,11,base);
+  px(8,27,24,3,base);px(11,30,18,2,shade);
+  px(6,18,2,7,shine);px(8,15,3,2,shine);px(29,17,3,10,shade);
+  px(26,27,5,3,shade);px(11,30,4,1,shine);px(17,13,6,1,shine);
+ }else if(species==='Snake Plant'){
+  // Upright sword leaves with bright variegated margins.
+  px(12,30,16,6,'#9d8291');px(10,29,20,3,'#c8a4b2');px(14,33,12,2,'#806877');
+  px(9,7,3,15,'#4c9965');px(10,4,2,3,'#b2db75');px(12,12,3,10,'#6cbb74');
+  px(15,3,4,19,'#458f5d');px(16,1,2,4,'#c2dc79');px(18,9,2,12,'#a1d57d');
+  px(22,5,4,17,'#4d9a63');px(23,2,2,5,'#c6df80');px(25,11,2,10,'#a4d67e');
+  px(29,9,3,13,'#397c55');px(30,6,2,4,'#c1d878');px(12,14,2,5,'#b7d679');
+  // Tall angular face, unlike the rounded Monstera.
+  px(12,13,16,2,deep);px(9,15,22,2,shade);px(8,17,24,12,base);
+  px(10,29,20,2,shade);px(12,31,16,1,shade);
+  px(8,18,2,9,shine);px(28,18,4,10,shade);px(13,15,4,1,shine);
+ }else{
+  // Fiddle-leaf fig: narrow woody trunk and broad violin-shaped crown.
+  px(11,30,18,6,'#a9805c');px(9,29,22,3,'#d5ac80');px(14,33,12,2,'#8e664b');
+  px(19,8,2,11,'#8b7954');px(17,9,3,3,'#538c50');px(12,6,7,5,'#4b955b');
+  px(11,3,8,5,'#6ebc71');px(13,1,5,3,'#95d98a');px(13,5,2,2,'#b5e7a0');
+  px(22,7,7,4,'#4e9a60');px(23,3,8,5,'#70bc76');px(26,1,5,3,'#9bdd8f');
+  px(24,6,2,2,'#b4e7a1');px(17,9,7,2,'#4e8c55');
+  // Taller, slightly narrower pear-shaped head.
+  px(14,12,12,2,shade);px(11,14,18,2,shade);px(9,16,22,3,base);
+  px(7,19,26,9,base);px(10,28,20,3,base);px(13,31,14,1,shade);
+  px(7,21,2,5,shine);px(29,20,4,8,shade);px(11,29,3,1,shine);
+ }
  // Freckles and blush
  px(9,24,5,2,mood==='sad'?'#d77991':'#ed9b9d');
  px(26,24,5,2,mood==='sad'?'#d77991':'#ed9b9d');
